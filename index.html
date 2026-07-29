@@ -98,7 +98,7 @@
   .container {
     position: relative;
     width: 100%;
-    max-width: 640px;
+    max-width: 900px;
   }
 
   .ornamento {
@@ -268,18 +268,18 @@
       radial-gradient(ellipse 1200px 600px at 50% 0%, rgba(156,107,40,0.06), transparent 60%),
       #e9e1cb;
     min-height: 100vh;
-    padding: 52px 30px;
+    padding: 52px 0;
   }
 
   @media (max-width: 768px) {
     #telaLicao {
-      padding: 24px 12px;
+      padding: 24px 0;
     }
   }
 
   .page {
     position: relative;
-    max-width: 1140px;
+    max-width: 100%;
     margin: 0 auto;
     background: var(--pergaminho);
     border-top: 4px solid var(--dourado);
@@ -333,16 +333,30 @@
   /* ===== CONTROLES DE ZOOM DE TEXTO ===== */
   .zoom-controles {
     position: fixed;
-    right: 20px;
+    right: 14px;
     bottom: 20px;
     z-index: 999;
     display: flex;
     align-items: center;
     gap: 2px;
-    background: var(--noite-1);
+    background: rgba(19, 28, 51, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     border-radius: 30px;
-    padding: 6px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+    padding: 4px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    opacity: 0.55;
+    transition: opacity 0.2s ease, background 0.2s ease;
+  }
+
+  .zoom-controles:hover,
+  .zoom-controles:focus-within {
+    opacity: 1;
+    background: var(--noite-1);
+  }
+
+  body.rolando .zoom-controles {
+    opacity: 0.22;
   }
 
   .btn-zoom {
@@ -350,9 +364,9 @@
     color: #f4efe3;
     border: none;
     border-radius: 50%;
-    width: 38px;
-    height: 38px;
-    font-size: 20px;
+    width: 34px;
+    height: 34px;
+    font-size: 18px;
     font-weight: 700;
     line-height: 1;
     cursor: pointer;
@@ -375,31 +389,25 @@
     background: transparent;
   }
 
-  .zoom-nivel {
-    font-size: 12px;
-    color: var(--dourado-claro);
-    min-width: 42px;
-    text-align: center;
-    user-select: none;
-  }
-
   .btn-topo {
     position: fixed;
-    left: 20px;
+    left: 14px;
     bottom: 20px;
     z-index: 999;
-    width: 44px;
-    height: 44px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
-    background: var(--noite-1);
+    background: rgba(19, 28, 51, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     color: #f4efe3;
     border: none;
-    font-size: 18px;
+    font-size: 16px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
     opacity: 0;
     transform: translateY(10px);
     pointer-events: none;
@@ -407,24 +415,30 @@
   }
 
   .btn-topo.visivel {
-    opacity: 1;
+    opacity: 0.55;
     transform: translateY(0);
     pointer-events: auto;
   }
 
-  .btn-topo:hover {
+  .btn-topo.visivel:hover,
+  .btn-topo.visivel:focus-visible {
+    opacity: 1;
     background: var(--dourado);
     color: #1b1409;
   }
 
+  body.rolando .btn-topo.visivel {
+    opacity: 0.22;
+  }
+
   @media (max-width: 480px) {
     .zoom-controles {
-      right: 14px;
+      right: 10px;
       bottom: 14px;
     }
 
     .btn-topo {
-      left: 14px;
+      left: 10px;
       bottom: 14px;
     }
   }
@@ -809,7 +823,7 @@
     font-family: var(--fonte-titulo);
     font-size: calc(48px * var(--zoom, 1));
     font-weight: 600;
-    color: var(--rubrica);
+    color: #000080;
     float: left;
     line-height: 0.82;
     padding-right: 8px;
@@ -954,7 +968,6 @@
 
   <div class="zoom-controles" id="zoomControles">
     <button class="btn-zoom" onclick="diminuirZoom()" title="Diminuir o tamanho do texto">&minus;</button>
-    <span class="zoom-nivel" id="zoomNivel">100%</span>
     <button class="btn-zoom" onclick="aumentarZoom()" title="Aumentar o tamanho do texto">+</button>
   </div>
 
@@ -1057,7 +1070,7 @@
               imagem: "https://i.imgur.com/jGfBuYa.png",
               titulo: "Lídia e a Expansão do Evangelho",
               texto: "“Depois de seguir a liderança do Espírito Santo rumo à Macedônia, Paulo fez seu primeiro contato evangelístico com um pequeno grupo de mulheres. Ele nunca permitiu que barreiras sociais ou culturais impedissem-no de anunciar as Boas Novas. Ele pregou para aquelas mulheres, e Lídia, uma comerciante influente, creu em Jesus. Isso abriu o caminho para o ministério naquela região. Deus frequentemente trabalha nas mulheres e por intermédio delas desde o início da Igreja. Lídia era uma comerciante de tecidos de púrpura. Provavelmente, rica, pois tais tecidos eram caros; frequentemente usados como um sinal de nobreza ou realeza. [...] Por que a família de Lídia foi batizada depois que ela respondeu com fé às Boas Novas? Porque o batismo era um sinal público da identificação da pessoa com Cristo e com a comunidade cristã. Talvez nem todos os parentes de Lídia tenham escolhido seguir a Cristo, porém a família dela tornou-se cristã.”",
-              fonte: "Bíblia de Estudo Aplicação Pessoal. Rio de Janeiro: CPAD, 2013, p.1520."
+              fonte: "<span style=\"color:#000000\">Bíblia de Estudo Aplicação Pessoal. Rio de Janeiro: CPAD, 2013, p.1520.</span>"
             },
             topicoII: {
               titulo: "II. A libertação da jovem possessa e o confronto com os poderes das trevas",
@@ -1072,7 +1085,7 @@
               imagem: "https://i.imgur.com/jGfBuYa.png",
               titulo: "Discernimento Espiritual e a Integridade do Evangelho",
               texto: "“A habilidade de adivinhar dessa moça vinha de espíritos malignos que a possuíam. A adivinhação era uma prática comum nas culturas grega e romana. Havia muitos métodos pelos quais as pessoas tentavam predizer eventos futuros, interpretar fenômenos da natureza e comunicar-se com os mortos. A jovem escrava estava possessa por um espírito maligno e enriquecia seus senhores interpretando sinais e lendo a sorte das pessoas. Eles exploravam a infeliz condição da jovem para obter lucros pessoais. O que a jovem dizia sobre Paulo era verdade, embora a informação procedesse de um demônio. Por que o apóstolo se sentiu incomodado por um espírito maligno anunciar a verdade a seu respeito? Se Paulo aceitasse o testemunho do demônio, estaria ligando a pregação das Boas Novas a atividades relacionadas aos demônios. Isso traria grandes prejuízos à mensagem a respeito de Cristo. A luz e as trevas não se misturam.”",
-              fonte: "Bíblia de Estudo Aplicação Pessoal. Rio de Janeiro: CPAD, 2013, p.1520."
+              fonte: "<span style=\"color:#000000\">Bíblia de Estudo Aplicação Pessoal. Rio de Janeiro: CPAD, 2013, p.1520.</span>"
             },
             topicoIII: {
               titulo: "III. A prisão de Paulo e Silas e a conversão do carcereiro",
@@ -1252,8 +1265,8 @@
             ampliandoConhecimento: {
               imagem: "https://www.estudantesdabiblia.com.br/images/livros/livro-0230.jpg",
               titulo: "O papel de Corinto",
-              texto: "Corinto desempenhou um papel significativo no ministério de Paulo, pois este a visitou em diversas ocasiões (1Co 12.14; 13.1), escreveu 1 e 2 Coríntios para a sua igreja e foi onde, ao que tudo indica, escreveu Romanos e 1 e 2 Tessalonicenses. Outros líderes da Igreja Primitiva também ministraram em Corinto, como Apolo por exemplo (At 19.1).",
-              fonte: "Amplie mais o seu conhecimento lendo o Dicionário Bíblico Baker, editado pela CPAD, pp.126,127."
+              texto: "<span style=\"color:#000080\">Corinto desempenhou um papel significativo no ministério de Paulo, pois este a visitou em diversas ocasiões (1Co 12.14; 13.1), escreveu 1 e 2 Coríntios para a sua igreja e foi onde, ao que tudo indica, escreveu Romanos e 1 e 2 Tessalonicenses. Outros líderes da Igreja Primitiva também ministraram em Corinto, como Apolo por exemplo (At 19.1).</span>",
+              fonte: "<span style=\"color:#000000\">Amplie mais o seu conhecimento lendo o Dicionário Bíblico Baker, editado pela CPAD, pp.126,127.</span>"
             },
             topicoII: {
               titulo: "II. A continuidade da missão e o encorajamento divino (At 18.7-11)",
@@ -1446,7 +1459,7 @@
             ampliandoConhecimento: {
               imagem: "https://www.estudantesdabiblia.com.br/images/livros/livro-0230.jpg",
               titulo: "O Presbítero",
-              texto: "O ofício de ancião ou presbítero (presbyteros) é um dos mais comuns na igreja. Esse ofício é baseado no modelo dos anciãos da sinagoga judaica. Paulo e Barnabé designaram presbíteros em todas as igrejas logo na sua primeira viagem missionária (At 14.23). Tiago instrui os enfermos a chamar os presbíteros da igreja para estes orarem por aqueles (Tg 5.14).",
+              texto: "<span style=\"color:#000080\">O ofício de ancião ou presbítero (presbyteros) é um dos mais comuns na igreja. Esse ofício é baseado no modelo dos anciãos da sinagoga judaica. Paulo e Barnabé designaram presbíteros em todas as igrejas logo na sua primeira viagem missionária (At 14.23). Tiago instrui os enfermos a chamar os presbíteros da igreja para estes orarem por aqueles (Tg 5.14).</span>",
               fonte: "Baseado em: Dicionário Bíblico Baker. Rio de Janeiro: CPAD, p.365."
             },
             topicoII: {
@@ -2033,7 +2046,7 @@
           <div class="extra-secao">
             <div class="extra-titulo">Texto Áureo</div>
             <div class="extra-corpo texto-aureo">
-              <p><em>"${ex.textoAureo.texto}"</em> <span class="referencia">(${ex.textoAureo.referencia})</span></p>
+              <p><em><span style="color:#000080">"${ex.textoAureo.texto}"</span></em> <span class="referencia">(${ex.textoAureo.referencia})</span></p>
             </div>
           </div>`;
       }
@@ -2043,7 +2056,7 @@
           <div class="extra-secao">
             <div class="extra-titulo">Verdade Prática</div>
             <div class="extra-corpo">
-              <p>${ex.verdadePratica}</p>
+              <p><span style="color:#000080">${ex.verdadePratica}</span></p>
             </div>
           </div>`;
       }
@@ -2052,7 +2065,7 @@
         const dias = ex.leituraDiaria.map(d => `
           <div class="leitura-dia">
             <div class="dia-ref">${d.dia} — ${d.referencia}</div>
-            <div class="dia-texto">${d.texto}</div>
+            <div class="dia-texto"><span style="color:#000080">${d.texto}</span></div>
           </div>`).join('');
 
         html += `
@@ -2065,7 +2078,7 @@
       if (ex.leituraEmClasse) {
         const versos = ex.versiculos ? ex.versiculos.map(v => `
           <div class="versiculo">
-            <span class="num">${v.num} —</span> <span class="texto-verso">${v.texto}</span>
+            <span class="num">${v.num} —</span> <span class="texto-verso"><span style="color:#000080">${v.texto}</span></span>
           </div>`).join('') : '';
 
         html += `
@@ -2083,14 +2096,14 @@
           <div class="extra-secao">
             <div class="extra-titulo">Hinos Sugeridos</div>
             <div class="extra-corpo">
-              <p>${ex.hinosSugeridos} da Harpa Cristã.</p>
+              <p><span style="color:#000080">${ex.hinosSugeridos} da Harpa Cristã.</span></p>
             </div>
           </div>`;
       }
 
       if (ex.planoDeAula) {
         const pa = ex.planoDeAula;
-        const objetivosHtml = pa.objetivos.map(o => `<li>${o}</li>`).join('');
+        const objetivosHtml = pa.objetivos.map(o => `<li><span style="color:#000080">${o}</span></li>`).join('');
 
         html += `
           <div class="extra-secao">
@@ -2098,23 +2111,23 @@
             <div class="extra-corpo texto-esquerda">
               <div class="subsecao">
                 <div class="subsecao-titulo">1. Introdução</div>
-                <p>${pa.introducao}</p>
+                <p><span style="color:#000080">${pa.introducao}</span></p>
               </div>
               <div class="subsecao">
                 <div class="subsecao-titulo">2. Apresentação da Lição</div>
                 <p><strong>A) Objetivos da Lição:</strong></p>
                 <ul class="objetivos-lista">${objetivosHtml}</ul>
-                <p><strong>B) Motivação:</strong> ${pa.motivacao}</p>
-                <p><strong>C) Sugestão de Método:</strong> ${pa.sugestaoMetodo}</p>
+                <p><strong>B) Motivação:</strong> <span style="color:#000080">${pa.motivacao}</span></p>
+                <p><strong>C) Sugestão de Método:</strong> <span style="color:#000080">${pa.sugestaoMetodo}</span></p>
               </div>
               <div class="subsecao">
                 <div class="subsecao-titulo">3. Conclusão da Lição</div>
-                <p><strong>A) Aplicação:</strong> ${pa.aplicacao}</p>
+                <p><strong>A) Aplicação:</strong> <span style="color:#000080">${pa.aplicacao}</span></p>
               </div>
               <div class="subsecao">
                 <div class="subsecao-titulo">4. Subsídio ao Professor</div>
-                <p><strong>A) Revista Ensinador Cristão:</strong> ${pa.subsidioRevista}</p>
-                <p><strong>B) Auxílios Especiais:</strong> ${pa.subsidioAuxiliares}</p>
+                <p><strong>A) Revista Ensinador Cristão:</strong> <span style="color:#000080">${pa.subsidioRevista}</span></p>
+                <p><strong>B) Auxílios Especiais:</strong> <span style="color:#000080">${pa.subsidioAuxiliares}</span></p>
               </div>
             </div>
           </div>`;
@@ -2126,7 +2139,7 @@
             <div class="extra-titulo">Comentário</div>
             <div class="extra-corpo texto-esquerda">
               <div class="subsecao-titulo">Introdução</div>
-              <p class="intro-capitular">${ex.comentarioIntroducao}</p>
+              <p class="intro-capitular"><span style="color:#000080">${ex.comentarioIntroducao}</span></p>
             </div>
           </div>`;
       }
@@ -2136,13 +2149,20 @@
           <hr>
           <div class="extra-secao">
             <div class="extra-corpo">
-              <p>Palavra-Chave: <span class="palavra-chave">${ex.palavraChave}</span></p>
+              <p><span style="color:#000080">Palavra-Chave:</span> <span class="palavra-chave" style="color:#8A3324">${ex.palavraChave}</span></p>
             </div>
           </div>`;
       }
 
+      const formatFonte = (fonte) => {
+        if (fonte && fonte.startsWith("Baseado em:")) {
+          return `<span style="color:#000000">${fonte}</span>`;
+        }
+        return fonte;
+      };
+
       if (ex.topicoI) {
-        const pontosHtml = ex.topicoI.pontos.map((p, i) => `<p><strong>${i + 1}. ${p.titulo}</strong> ${p.texto}</p>`).join('');
+        const pontosHtml = ex.topicoI.pontos.map((p, i) => `<p><strong>${i + 1}. ${p.titulo}</strong> <span style="color:#000080">${p.texto}</span></p>`).join('');
         html += `
           <div class="extra-secao">
             <div class="extra-corpo texto-esquerda">
@@ -2152,7 +2172,7 @@
           </div>
           <div class="extra-secao">
             <div class="extra-corpo">
-              <p class="sinopse">SINOPSE I<br>${ex.topicoI.sinopse}</p>
+              <p class="sinopse"><span style="color:#000080">SINOPSE I<br>${ex.topicoI.sinopse}</span></p>
             </div>
           </div>`;
       }
@@ -2166,8 +2186,8 @@
             <div class="extra-corpo texto-esquerda">
               <div class="auxilio-imagem"><img src="${at.imagem}" alt="${at.titulo}"></div>
               <div class="auxilio-titulo">${at.titulo}</div>
-              <p class="auxilio-texto">${at.texto}</p>
-              <p class="auxilio-fonte">${at.fonte}</p>
+              <p class="auxilio-texto"><span style="color:#000080">${at.texto}</span></p>
+              <p class="auxilio-fonte">${formatFonte(at.fonte)}</p>
             </div>
           </div>`;
       }
@@ -2182,13 +2202,13 @@
               <div class="auxilio-imagem"><img src="${ac.imagem}" alt="${ac.titulo}"></div>
               <div class="auxilio-titulo">${ac.titulo}</div>
               <p class="auxilio-texto">${ac.texto}</p>
-              <p class="auxilio-fonte">${ac.fonte}</p>
+              <p class="auxilio-fonte">${formatFonte(ac.fonte)}</p>
             </div>
           </div>`;
       }
 
       if (ex.topicoII) {
-        const pontosHtml2 = ex.topicoII.pontos.map((p, i) => `<p><strong>${i + 1}. ${p.titulo}</strong> ${p.texto}</p>`).join('');
+        const pontosHtml2 = ex.topicoII.pontos.map((p, i) => `<p><strong>${i + 1}. ${p.titulo}</strong> <span style="color:#000080">${p.texto}</span></p>`).join('');
         html += `
           <hr>
           <div class="extra-secao">
@@ -2200,7 +2220,7 @@
           <hr>
           <div class="extra-secao">
             <div class="extra-corpo">
-              <p class="sinopse">SINOPSE II<br>${ex.topicoII.sinopse}</p>
+              <p class="sinopse"><span style="color:#000080">SINOPSE II<br>${ex.topicoII.sinopse}</span></p>
             </div>
           </div>`;
       }
@@ -2213,14 +2233,14 @@
             <div class="extra-corpo texto-esquerda">
               <div class="auxilio-imagem"><img src="${ab.imagem}" alt="${ab.titulo}"></div>
               <div class="auxilio-titulo">${ab.titulo}</div>
-              <p class="auxilio-texto">${ab.texto}</p>
-              <p class="auxilio-fonte">${ab.fonte}</p>
+              <p class="auxilio-texto"><span style="color:#000080">${ab.texto}</span></p>
+              <p class="auxilio-fonte"><span style="color:#000080">${formatFonte(ab.fonte)}</span></p>
             </div>
           </div>`;
       }
 
       if (ex.topicoIII) {
-        const pontosHtml3 = ex.topicoIII.pontos.map((p, i) => `<p><strong>${i + 1}. ${p.titulo}</strong> ${p.texto}</p>`).join('');
+        const pontosHtml3 = ex.topicoIII.pontos.map((p, i) => `<p><strong>${i + 1}. ${p.titulo}</strong> <span style="color:#000080">${p.texto}</span></p>`).join('');
         html += `
           <hr>
           <div class="extra-secao">
@@ -2232,7 +2252,7 @@
           <hr>
           <div class="extra-secao">
             <div class="extra-corpo">
-              <p class="sinopse">SINOPSE III<br>${ex.topicoIII.sinopse}</p>
+              <p class="sinopse"><span style="color:#000080">SINOPSE III<br>${ex.topicoIII.sinopse}</span></p>
             </div>
           </div>`;
       }
@@ -2246,8 +2266,8 @@
             <div class="extra-corpo texto-esquerda">
               <div class="auxilio-imagem"><img src="${ab2.imagem}" alt="${ab2.titulo}"></div>
               <div class="auxilio-titulo">${ab2.titulo}</div>
-              <p class="auxilio-texto">${ab2.texto}</p>
-              <p class="auxilio-fonte">${ab2.fonte}</p>
+              <p class="auxilio-texto"><span style="color:#000080">${ab2.texto}</span></p>
+              <p class="auxilio-fonte"><span style="color:#000080">${formatFonte(ab2.fonte)}</span></p>
             </div>
           </div>`;
       }
@@ -2258,7 +2278,7 @@
           <div class="extra-secao">
             <div class="extra-titulo">Conclusão</div>
             <div class="extra-corpo texto-esquerda">
-              <p class="conclusao-texto">${ex.conclusaoLicao}</p>
+              <p class="conclusao-texto"><span style="color:#000080">${ex.conclusaoLicao}</span></p>
             </div>
           </div>`;
       }
@@ -2267,7 +2287,7 @@
         const itensHtml = ex.revisandoConteudo.map((r, i) => `
           <div class="revisao-item">
             <div class="revisao-pergunta">${i + 1}. ${r.pergunta}</div>
-            <div class="revisao-resposta">${r.resposta}</div>
+            <div class="revisao-resposta"><span style="color:#000080">${r.resposta}</span></div>
           </div>`).join('');
 
         html += `
@@ -2287,7 +2307,7 @@
             <div class="extra-corpo texto-esquerda">
               <div class="subsidios-imagem"><img src="${ex.subsidiosEnsinador.imagem}" alt="Subsídios Ensinador Cristão"></div>
               <div class="auxilio-titulo">${ex.subsidiosEnsinador.titulo}</div>
-              <p class="auxilio-texto">${ex.subsidiosEnsinador.texto}</p>
+              <p class="auxilio-texto"><span style="color:#000080">${ex.subsidiosEnsinador.texto}</span></p>
             </div>
           </div>`;
       }
@@ -2320,16 +2340,41 @@
   const ZOOM_PASSO = 0.25;
   let zoomAtual = 1;
 
-  function aplicarZoom() {
-    document.documentElement.style.setProperty('--zoom', zoomAtual);
+  // Captura um elemento de referência próximo ao topo da área visível,
+  // para que possamos manter esse mesmo ponto de leitura na tela após o zoom.
+  function capturarAncoraLeitura() {
+    if (telaLicao.style.display !== 'block') return null;
 
-    const label = document.getElementById('zoomNivel');
-    if (label) label.textContent = Math.round(zoomAtual * 100) + '%';
+    const pontoY = Math.min(140, window.innerHeight / 2);
+    const el = document.elementFromPoint(window.innerWidth / 2, pontoY);
+    if (!el) return null;
+
+    return { el: el, topAntes: el.getBoundingClientRect().top };
+  }
+
+  // Ajusta a rolagem para que o elemento capturado volte para a mesma posição na tela
+  function restaurarAncoraLeitura(ancora) {
+    if (!ancora || !ancora.el || !ancora.el.isConnected) return;
+
+    const topDepois = ancora.el.getBoundingClientRect().top;
+    const delta = topDepois - ancora.topAntes;
+
+    if (delta !== 0) {
+      window.scrollBy(0, delta);
+    }
+  }
+
+  function aplicarZoom() {
+    const ancora = capturarAncoraLeitura();
+
+    document.documentElement.style.setProperty('--zoom', zoomAtual);
 
     const btnMenos = document.querySelector('.zoom-controles button:first-child');
     const btnMais = document.querySelector('.zoom-controles button:last-child');
     if (btnMenos) btnMenos.disabled = zoomAtual <= ZOOM_MIN;
     if (btnMais) btnMais.disabled = zoomAtual >= ZOOM_MAX;
+
+    restaurarAncoraLeitura(ancora);
 
     try {
       localStorage.setItem('zoomNivel', zoomAtual);
@@ -2364,13 +2409,24 @@
 
   const btnTopo = document.getElementById('btnTopo');
 
+  // Enquanto a página está rolando, os botões flutuantes ficam quase
+  // transparentes para não tampar o texto sendo lido; ao parar de rolar,
+  // eles voltam à opacidade normal (e ficam totalmente visíveis ao toque/hover).
+  let timeoutRolagem = null;
+
   window.addEventListener('scroll', () => {
     if (telaLicao.style.display === 'block' && window.scrollY > 300) {
       btnTopo.classList.add('visivel');
     } else {
       btnTopo.classList.remove('visivel');
     }
-  });
+
+    document.body.classList.add('rolando');
+    clearTimeout(timeoutRolagem);
+    timeoutRolagem = setTimeout(() => {
+      document.body.classList.remove('rolando');
+    }, 500);
+  }, { passive: true });
 
   function voltarParaSelecao() {
     telaLicao.style.display = 'none';
