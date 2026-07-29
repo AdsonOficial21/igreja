@@ -101,6 +101,22 @@
     max-width: 900px;
   }
 
+  .header-imagem-selecao {
+    display: block;
+    width: 100%;
+    max-width: 520px;
+    height: auto;
+    margin: 0 auto 28px;
+    filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35));
+  }
+
+  @media (max-width: 480px) {
+    .header-imagem-selecao {
+      max-width: 320px;
+      margin-bottom: 20px;
+    }
+  }
+
   .ornamento {
     display: flex;
     align-items: center;
@@ -480,6 +496,21 @@
     background: rgba(32,58,92,0.06);
     border-color: var(--dourado);
     transform: translateX(-2px);
+  }
+
+  .header-imagem-licao {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+    margin: 0 auto 20px;
+  }
+
+  @media (max-width: 768px) {
+    .header-imagem-licao {
+      max-width: 280px;
+      margin-bottom: 16px;
+    }
   }
 
   .masthead {
@@ -946,6 +977,7 @@
 <!-- ===== TELA 1: SELEÇÃO ===== -->
 <div id="telaSelecao">
   <div class="container">
+    <img class="header-imagem-selecao" src="https://i.imgur.com/vsubXmU.png" alt="Lições Bíblicas CPAD">
     <div class="ornamento">
       <span class="linha"></span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="color:#cd9d4f;"><path d="M12 5c-1.8-1.6-4-2-6.5-1.6C4 3.6 3 4.4 3 5.5v12c0 .8.8 1.3 1.5 1.1C7 18 9.5 18.2 11.3 19.7c.4.3 1 .3 1.4 0C14.5 18.2 17 18 19.5 18.6c.7.2 1.5-.3 1.5-1.1v-12c0-1.1-1-1.9-2.5-1.6C16 3 13.8 3.4 12 5Z"/><path d="M12 5v14.5"/></svg>
@@ -974,6 +1006,8 @@
   <div class="page">
 
     <button class="btn-inicio" onclick="voltarParaSelecao()">&larr; Voltar ao início</button>
+
+    <img class="header-imagem-licao" src="https://i.imgur.com/vsubXmU.png" alt="Lições Bíblicas CPAD">
 
     <div class="masthead">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 5c-1.8-1.6-4-2-6.5-1.6C4 3.6 3 4.4 3 5.5v12c0 .8.8 1.3 1.5 1.1C7 18 9.5 18.2 11.3 19.7c.4.3 1 .3 1.4 0C14.5 18.2 17 18 19.5 18.6c.7.2 1.5-.3 1.5-1.1v-12c0-1.1-1-1.9-2.5-1.6C16 3 13.8 3.4 12 5Z"/><path d="M12 5v14.5"/></svg>
