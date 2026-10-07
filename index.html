@@ -277,6 +277,40 @@
     text-transform: uppercase;
   }
 
+  /* ===== BOTÃO OLHO (mostrar/ocultar lições) ===== */
+  .lesson-item.oculta { display: none; }
+
+  .btn-olho {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 18px auto 0;
+    padding: 10px 20px;
+    background: var(--pergaminho-painel);
+    color: var(--dourado);
+    border: 1px solid var(--pergaminho-borda);
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 13px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.22);
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .btn-olho:hover,
+  .btn-olho:focus-visible {
+    transform: translateY(-2px);
+    border-color: var(--dourado);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  }
+
+  .btn-olho svg { width: 22px; height: 22px; }
+  .btn-olho .olho-fechado { display: none; }
+  .btn-olho.ativo .olho-aberto { display: none; }
+  .btn-olho.ativo .olho-fechado { display: inline; }
+
   /* ===== TELA DE DETALHE DA LIÇÃO ===== */
   #telaLicao {
     display: none;
@@ -989,6 +1023,14 @@
 
     <div class="lesson-list" id="lessonList"></div>
 
+    <button class="btn-olho" id="btnOlho" type="button" title="Mostrar todas as lições" aria-label="Mostrar todas as lições" aria-pressed="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <g class="olho-aberto"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></g>
+        <g class="olho-fechado"><path d="M17.9 17.9A10.6 10.6 0 0 1 12 19C5.6 19 2 12 2 12a18.6 18.6 0 0 1 4.1-5.1M9.9 5.2A9.8 9.8 0 0 1 12 5c6.4 0 10 7 10 7a18.5 18.5 0 0 1-2.2 3.2"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/><path d="M2 2l20 20"/></g>
+      </svg>
+      <span id="btnOlhoTexto">Ver todas as lições</span>
+    </button>
+
     <p class="rodape-selecao">Lições Bíblicas CPAD · Adultos</p>
   </div>
 </div>
@@ -1018,9 +1060,9 @@
     <hr>
 
     <div class="info-trimestre">
-      <div class="trimestre">3º Trimestre de 2026</div>
-      <p><strong>Título:</strong> A Igreja dos Gentios — Da chamada missionária à consolidação do Evangelho entre os povos</p>
-      <p><strong>Comentarista:</strong> Wagner Gaby</p>
+      <div class="trimestre" id="infoTrimestre">3º Trimestre de 2026</div>
+      <p><strong>Título:</strong> <span id="infoTitulo">A Igreja dos Gentios — Da chamada missionária à consolidação do Evangelho entre os povos</span></p>
+      <p><strong>Comentarista:</strong> <span id="infoComentarista">Wagner Gaby</span></p>
     </div>
 
     <hr>
@@ -1042,109 +1084,202 @@
 
 <script>
   const licoes = {
-    4:  { titulo: "O Espírito que nos guia para além das fronteiras", data: "26 de julho de 2026", imagem: "https://i.imgur.com/h9cQIGg.png",
-          extras: {
-            textoAureo: {
-              texto: "De sorte que as igrejas eram confirmadas na fé e cada dia cresciam em número.",
-              referencia: "At 16.5"
-            },
-            verdadePratica: "O Espírito Santo não apenas guia o cristão em seus passos, mas também o impede de avançar quando isso não está em acordo com a vontade de Deus.",
-            leituraDiaria: [
-              { dia: "Segunda", referencia: "At 15.39,40; 16.1", texto: "O Espírito Santo conduz a nossa vida em meio às tensões" },
-              { dia: "Terça", referencia: "At 16.6-9", texto: "Deus dirige a nossa vida, abrindo e fechando portas" },
-              { dia: "Quarta", referencia: "At 16.14,15", texto: "Quando o coração se abre, a Palavra é recebida com fé" },
-              { dia: "Quinta", referencia: "At 16.16-18", texto: "O nome de Jesus tem autoridade sobre as trevas" },
-              { dia: "Sexta", referencia: "At 16.22-26", texto: "A fidelidade ao Evangelho sustenta o crente" },
-              { dia: "Sábado", referencia: "At 16.30,31", texto: "A salvação pela fé em Cristo transforma famílias inteiras" }
-            ],
-            leituraEmClasse: "Atos 16.11-18, 25-31",
-            versiculos: [
-              { num: 11, texto: "E, navegando de Trôade, fomos correndo em caminho direito para a Samotrácia e, no dia seguinte, para Neápolis;" },
-              { num: 12, texto: "e dali, para Filipos, que é a primeira cidade desta parte da Macedônia e é uma colônia; e estivemos alguns dias nesta cidade." },
-              { num: 13, texto: "No dia de sábado, saímos fora das portas, para a beira do rio, onde julgávamos haver um lugar para oração; e, assentando-nos, falamos às mulheres que ali se ajuntaram." },
-              { num: 14, texto: "E uma certa mulher, chamada Lídia, vendedora de púrpura, da cidade de Tiatira, e que servia a Deus, nos ouvia, e o Senhor lhe abriu o coração para que estivesse atenta ao que Paulo dizia." },
-              { num: 15, texto: "Depois que foi batizada, ela e a sua casa, nos rogou, dizendo: Se haveis julgado que eu seja fiel ao Senhor, entrai em minha casa e ficai ali. E nos constrangeu a isso." },
-              { num: 16, texto: "E aconteceu que, indo nós à oração, nos saiu ao encontro uma jovem que tinha espírito de adivinhação, a qual, adivinhando, dava grande lucro aos seus senhores." },
-              { num: 17, texto: "Esta, seguindo a Paulo e a nós, clamava, dizendo: Estes homens, que nos anunciam o caminho da salvação, são servos do Deus Altíssimo." },
-              { num: 18, texto: "E isto fez ela por muitos dias. Mas Paulo, perturbado, voltou-se e disse ao espírito: Em nome de Jesus Cristo, te mando que saias dela. E, na mesma hora, saiu." },
-              { num: 25, texto: "Perto da meia-noite, Paulo e Silas oravam e cantavam hinos a Deus, e os outros presos os escutavam." },
-              { num: 26, texto: "E, de repente, sobreveio um tão grande terremoto, que os alicerces do cárcere se moveram, e logo se abriram todas as portas, e foram soltas as prisões de todos." },
-              { num: 27, texto: "Acordando o carcereiro e vendo abertas as portas da prisão, tirou a espada e quis matar-se, cuidando que os presos já tinham fugido." },
-              { num: 28, texto: "Mas Paulo clamou com grande voz, dizendo: Não te faças nenhum mal, que todos aqui estamos." },
-              { num: 29, texto: "E, pedindo luz, saltou dentro e, todo trêmulo, se prostrou ante Paulo e Silas." },
-              { num: 30, texto: "E, tirando-os para fora, disse: Senhores, que é necessário que eu faça para me salvar?" },
-              { num: 31, texto: "E eles disseram: Crê no Senhor Jesus Cristo e serás salvo, tu e a tua casa." }
-            ],
-            hinosSugeridos: "155, 290 e 511",
-            planoDeAula: {
-              introducao: "Nesta lição, temos a oportunidade de refletir sobre a ação soberana do Espírito Santo na condução da missão cristã. A segunda viagem missionária de Paulo revela que o avanço do Evangelho não depende apenas de planejamento humano, mas de sensibilidade à direção divina. Ao estudar a abertura de novos campos, os conflitos espirituais e a transformação de vidas, o aluno compreenderá que o Santo Espírito guia, impede, redireciona e fortalece a Igreja para avançar além das fronteiras, cumprindo o propósito de Deus.",
-              objetivos: [
-                "Interpretar a direção do Espírito Santo na expansão missionária e na Igreja",
-                "Contrastar o poder do Evangelho com a atuação das trevas em Filipos",
-                "Mobilizar a classe a responder com fé e louvor em contextos de sofrimento"
-              ],
-              motivacao: "Estudar esta lição é fundamental para compreender que a Missão Cristã não avança apenas por iniciativa humana, mas pela direção soberana do Espírito Santo. Ao observar como Deus guia, redireciona e sustenta seus servos, fortalecemos a fé, aprendemos a discernir a vontade divina e somos encorajados a confiar no Espírito, mesmo em meio a conflitos, oposição e sofrimento.",
-              sugestaoMetodo: "Para concluir a lição, proponha um momento de síntese reflexiva, retomando brevemente os três movimentos do texto: direção do Espírito, confronto espiritual e transformação de vidas. Em seguida, convide a classe a identificar situações atuais em que precisam discernir a vontade de Deus, mantendo fidelidade mesmo em contextos adversos. Finalize com uma leitura bíblica coletiva de Atos 16.31 e um momento de oração, incentivando os alunos a consagrarem seus caminhos ao Espírito Santo, reforçando a ligação entre ensino bíblico, experiência de fé e prática cristã.",
-              aplicacao: "De acordo com o ensino bíblico, o cristão é chamado a viver segundo a direção do Espírito Santo, confiando em Deus mesmo quando caminhos são fechados ou surgem adversidades. A fidelidade, o louvor e a obediência transformam crises em oportunidades de testemunho, permitindo que o Evangelho alcance vidas e lares por meio da graça de Cristo.",
-              subsidioRevista: "Vale a pena conhecer essa revista que traz reportagens, artigos, entrevistas e subsídios de apoio à Lições Bíblicas Adultos. Na edição 106, p.38, você encontrará um subsídio especial para esta lição.",
-              subsidioAuxiliares: "Ao final do tópico, você encontrará auxílios que darão suporte na preparação de sua aula: 1) O texto “Lídia e a Expansão do Evangelho”, localizado depois do primeiro tópico, aprofunda o assunto sobre o papel das mulheres na expansão da igreja gentílica do primeiro século; 2) O texto “Discernimento Espiritual e a Integridade da Mensagem Cristã”, localizado ao final do segundo tópico, aprofunda a reflexão a respeito do discernimento espiritual no trabalho da expansão do Evangelho."
-            },
-            comentarioIntroducao: "A segunda viagem missionária de Paulo marca um avanço decisivo da Igreja: o fortalecimento das igrejas já fundadas e a expansão do Evangelho para novos territórios, culminando na entrada da mensagem cristã na Europa (At 15.36-18.22). Mesmo diante de conflitos e mudanças de rota, o Espírito Santo conduz cada passo, impedindo caminhos e abrindo outros conforme a vontade de Deus. Esta lição revela o Espírito que nos guia para além das fronteiras, mostrando que a missão avança quando a Igreja aprende a ouvir, obedecer e confiar na direção divina.",
-            palavraChave: "FRONTEIRAS",
-            topicoI: {
-              titulo: "I. Lídia: quando o Espírito abre o coração e funda uma igreja",
-              pontos: [
-                { titulo: "A direção soberana do Espírito na segunda viagem missionária.", texto: "Na segunda viagem missionária, o destaque recai não apenas sobre a expansão geográfica da Igreja, mas sobre a condução soberana do Espírito Santo em cada decisão. Após a separação entre Paulo e Barnabé, Paulo parte com Silas, recomendado pela igreja, e em Listra incorpora Timóteo à equipe missionária (At 15.39,40; 16.1). Ao tentarem avançar para a Ásia e para a Bitínia, são impedidos pelo Espírito, aprendendo que a missão não avança apenas por estratégia humana, mas por sensibilidade espiritual. Em Trôade, Paulo recebe a visão do varão macedônio, confirmando a direção divina rumo à Europa (At 16.9)." },
-                { titulo: "Fé sincera, sensibilidade espiritual e hospitalidade de Lídia.", texto: "Lídia é apresentada como “adoradora de Deus”, provavelmente uma gentia temente ao Senhor. Comerciante de púrpura, originária de Tiatira, possuía boa condição financeira, mas não era dominada pelo materialismo. Em Filipos, demonstra sensibilidade espiritual ao participar das reuniões de oração. O texto afirma que “o Senhor lhe abriu o coração” para atender à mensagem de Paulo, revelando que a conversão é obra da graça divina. Lídia crê, é batizada com sua casa e coloca seus bens a serviço do Reino, tornando seu lar o primeiro núcleo da igreja em solo europeu (At 16.14,15,40)." },
-                { titulo: "A pregação em Filipos: simplicidade, graça e poder transformador.", texto: "Sem sinagoga, Paulo inicia a missão junto a mulheres reunidas à beira do rio. Ali, em um ambiente simples, o Evangelho produz frutos eternos. Lídia responde com fé e obediência, ensinando que Deus age tanto em grandes centros quanto em encontros humildes. Sua conversão inaugura a igreja em Filipos e revela que onde o Espírito abre corações, o Reino avança. Contudo, a mesma cidade que recebe o Evangelho também manifestará oposição espiritual, preparando o cenário para a libertação da jovem possessa, que veremos no próximo tópico (At 16.16-21)." }
-              ],
-              sinopse: "O Espírito dirige a missão ao abrir corações e plantar igrejas."
-            },
-            auxilioBibliologico: {
-              imagem: "https://i.imgur.com/jGfBuYa.png",
-              titulo: "Lídia e a Expansão do Evangelho",
-              texto: "“Depois de seguir a liderança do Espírito Santo rumo à Macedônia, Paulo fez seu primeiro contato evangelístico com um pequeno grupo de mulheres. Ele nunca permitiu que barreiras sociais ou culturais impedissem-no de anunciar as Boas Novas. Ele pregou para aquelas mulheres, e Lídia, uma comerciante influente, creu em Jesus. Isso abriu o caminho para o ministério naquela região. Deus frequentemente trabalha nas mulheres e por intermédio delas desde o início da Igreja. Lídia era uma comerciante de tecidos de púrpura. Provavelmente, rica, pois tais tecidos eram caros; frequentemente usados como um sinal de nobreza ou realeza. [...] Por que a família de Lídia foi batizada depois que ela respondeu com fé às Boas Novas? Porque o batismo era um sinal público da identificação da pessoa com Cristo e com a comunidade cristã. Talvez nem todos os parentes de Lídia tenham escolhido seguir a Cristo, porém a família dela tornou-se cristã.”",
-              fonte: "<span style=\"color:#000000\">Bíblia de Estudo Aplicação Pessoal. Rio de Janeiro: CPAD, 2013, p.1520.</span>"
-            },
-            topicoII: {
-              titulo: "II. A libertação da jovem possessa e o confronto com os poderes das trevas",
-              pontos: [
-                { titulo: "A expulsão de um espírito de adivinhação (vv.16-18).", texto: "Mesmo tendo como base a casa de Lídia, Paulo e seus companheiros continuavam a frequentar o lugar de oração (At 16.13). Numa dessas ocasiões, encontraram uma jovem escrava possessa por um espírito de adivinhação (pneuma pythōna), prática condenada pelas Escrituras (Dt 18.9-11). Embora falasse verdades sobre os missionários, seu testemunho não procedia de Deus, à semelhança dos demônios que reconheceram Jesus (Mc 1.24; Lc 4.41). Perturbado, Paulo ordenou, em nome de Jesus Cristo, que o espírito saísse dela, e a libertação foi imediata (At 16.18), revelando a autoridade do Evangelho sobre as trevas." },
-                { titulo: "A reação dos exploradores e a perseguição injusta (vv.19-22).", texto: "A libertação da jovem significou prejuízo financeiro para seus senhores, que, movidos por interesses econômicos, arrastaram Paulo e Silas às autoridades (At 16.19). Sob falsas acusações de perturbação da ordem pública, os missionários foram condenados sem julgamento, açoitados publicamente e lançados na prisão (At 16.22,23). A fé cristã mostrou-se uma ameaça não à ordem social, mas a sistemas de exploração travestidos de religiosidade." },
-                { titulo: "A falha da justiça humana (vv.21-24).", texto: "Os magistrados romanos ignoraram o devido processo legal e violaram os direitos de Paulo e Silas como cidadãos romanos (At 16.22-24; At 22.25-29). O episódio evidencia que a justiça humana é falha e pode ser movida por pressões e interesses, mas isso não frustra os propósitos de Deus (Sl 37.12,13). Muitas vezes, o sofrimento do justo se torna instrumento para a manifestação da graça. O crente é chamado a discernir, confiar e permanecer fiel, mesmo quando agir corretamente, resulta em oposição e injustiça. Deus continua soberano, inclusive nas prisões da vida. E é justamente nesse contexto que o Senhor transformará dor em testemunho, como no episódio da prisão de Paulo e Silas e a conversão do carcereiro." }
-              ],
-              sinopse: "O Evangelho confronta as trevas e liberta vidas pelo poder de Jesus."
-            },
-            auxilioBiblicoTeologico: {
-              imagem: "https://i.imgur.com/jGfBuYa.png",
-              titulo: "Discernimento Espiritual e a Integridade do Evangelho",
-              texto: "“A habilidade de adivinhar dessa moça vinha de espíritos malignos que a possuíam. A adivinhação era uma prática comum nas culturas grega e romana. Havia muitos métodos pelos quais as pessoas tentavam predizer eventos futuros, interpretar fenômenos da natureza e comunicar-se com os mortos. A jovem escrava estava possessa por um espírito maligno e enriquecia seus senhores interpretando sinais e lendo a sorte das pessoas. Eles exploravam a infeliz condição da jovem para obter lucros pessoais. O que a jovem dizia sobre Paulo era verdade, embora a informação procedesse de um demônio. Por que o apóstolo se sentiu incomodado por um espírito maligno anunciar a verdade a seu respeito? Se Paulo aceitasse o testemunho do demônio, estaria ligando a pregação das Boas Novas a atividades relacionadas aos demônios. Isso traria grandes prejuízos à mensagem a respeito de Cristo. A luz e as trevas não se misturam.”",
-              fonte: "<span style=\"color:#000000\">Bíblia de Estudo Aplicação Pessoal. Rio de Janeiro: CPAD, 2013, p.1520.</span>"
-            },
-            topicoIII: {
-              titulo: "III. A prisão de Paulo e Silas e a conversão do carcereiro",
-              pontos: [
-                { titulo: "Açoitados e presos por causa do Evangelho (At 16.22-24).", texto: "Falsamente acusados, Paulo e Silas foram publicamente açoitados e lançados no cárcere interior de Filipos, com os pés presos no tronco. Tratados como criminosos perigosos, sofreram humilhação, dor e injustiça. O cárcere interior, provavelmente localizado no subsolo, era um lugar de escuridão e sofrimento extremo. Contudo, aquele ambiente de aflição tornou-se cenário da manifestação do poder de Deus, mostrando que nenhuma prisão é capaz de limitar a ação soberana do Senhor." },
-                { titulo: "O louvor que abre portas e transforma ambientes (At 16.25,26).", texto: "Por volta da meia-noite, mesmo feridos e imobilizados, Paulo e Silas oravam e cantavam hinos a Deus. O louvor, nascido em meio à dor, revelou uma fé que não depende das circunstâncias (Rm 5.3; Tg 1.2). Subitamente, um terremoto sacudiu a prisão, abriu as portas e soltou as cadeias de todos os presos. O milagre foi tão impactante que ninguém tentou fugir, evidenciando que a presença de Deus gera reverência e temor." },
-                { titulo: "A conversão do carcereiro e a vitória da graça (At 16.27-34).", texto: "Ao ver as portas abertas, o carcereiro, tomado de desespero, tentou tirar a própria vida, mas foi impedido por Paulo. Profundamente impactado, perguntou: “Que devo fazer para ser salvo?” A resposta foi clara: “Crê no Senhor Jesus Cristo e serás salvo, tu e a tua casa” (At 16.31). Ele creu, cuidou das feridas dos missionários, foi batizado com sua família e recebeu-os com alegria. Onde o Evangelho entra, vidas e lares são transformados (2Co 5.17). Este episódio ensina que Deus continua soberano mesmo nas prisões da vida. Quando o crente escolhe louvar em meio à dor e permanecer fiel diante da injustiça, o Senhor transforma sofrimento em testemunho e usa circunstâncias adversas para salvar outros." }
-              ],
-              sinopse: "Louvor e fé em meio à dor conduzem à salvação e transformação."
-            },
-            conclusaoLicao: "Após cerca de três anos de intensa atividade missionária, Paulo retorna a Antioquia da Síria (At 18.22), encerrando um ciclo marcado por direção divina, perseverança e frutos abundantes. A narrativa bíblica deixa claro que a missão é contínua e exige fidelidade, mesmo em meio às oposições. Guiados pelo Espírito Santo, os servos de Deus avançam, a Igreja é fortalecida e novas comunidades cristãs são estabelecidas, inclusive no solo europeu. A expansão do Reino depende de obreiros comprometidos com a Palavra e sensíveis à voz do Espírito. Assim como Paulo, sejamos fiéis, ousados e obedientes à direção do Espírito Santo em cada etapa da nossa caminhada cristã.",
-            revisandoConteudo: [
-              { pergunta: "O que ocorreu quando Paulo e Silas tentaram avançar para a Ásia e Bitínia durante a segunda viagem missionária?", resposta: "Ao tentarem avançar para a Ásia e para a Bitínia, Paulo e Silas são impedidos pelo Espírito, aprendendo que a missão não avança apenas por estratégia humana, mas por sensibilidade espiritual." },
-              { pergunta: "O que aconteceu após o Senhor “abrir o coração” de Lídia para atender a mensagem de Paulo?", resposta: "Lídia crê, e é batizada com sua casa." },
-              { pergunta: "Por que os senhores da jovem possessa se revoltaram contra Paulo e Silas após a libertação dela?", resposta: "A libertação da jovem significou prejuízo financeiro para seus senhores, que, movidos por interesses econômicos, arrastaram Paulo e Silas às autoridades (At 16.19)." },
-              { pergunta: "O que Paulo e Silas faziam na prisão, mesmo feridos e imobilizados?", resposta: "Paulo e Silas oravam e cantavam hinos a Deus." },
-              { pergunta: "Qual foi a pergunta feita pelo carcereiro a Paulo e Silas, e qual foi a resposta dada por eles?", resposta: "Profundamente impactado, perguntou: “Que devo fazer para ser salvo?” A resposta foi clara: “Crê no Senhor Jesus Cristo e serás salvo, tu e a tua casa” (At 16.31)." }
-            ],
-            subsidiosEnsinador: {
-              imagem: "https://i.imgur.com/DhNc5vd.png",
-              titulo: "O Espírito que nos usa para além das fronteiras",
-              texto: "Nesta rica oportunidade, trataremos sobre a segunda viagem missionária do apóstolo Paulo. Depois do sucesso da primeira viagem, o apóstolo é impelido pelo Espírito a confirmar e fortalecer as igrejas que foram fundadas na primeira viagem e avançar com a pregação do Evangelho em boa parte da Europa do mundo antigo. A experiência de Paulo nesta viagem revela uma lição importante a todos os que receberam de Deus o chamado missionário: não basta apenas ter boa vontade para pregar, é preciso obedecer irrestritamente à voz do Espírito Santo. Após separar-se de Barnabé, Paulo e Silas, acompanhados agora de Timóteo, partem em direção à Listra. No entanto, o Espírito os impediu de prosseguir em direção à Ásia. Ao chegar em Trôade, Paulo recebe a visão de um homem macedônio suplicando “Passa à Macedônia, e ajuda-nos” (At 16.9). Essas informações destacam que o trabalho missionário da igreja não era feito apenas considerando as circunstâncias humanas, mas, também sob a oração e orientação do Espírito Santo. O resultado desse direcionamento foi o avanço do Evangelho em Filipos, local onde Paulo fundou mais uma igreja, e a conversão de muitas pessoas que se tornaram colaboradores do ministério de Paulo, dentre elas, Lídia, a vendedora de púrpura (At 16.14). Ainda nesta viagem, Paulo orou pela jovem que tinha um espírito de adivinhação (vv.16-18) e, posteriormente na prisão, impediu a morte do carcereiro que veio a se converter (vv.27-32). Roy B. Zuck, na obra Teologia do Novo Testamento (CPAD), discorre que “aparentemente, os eventos da Igreja Primitiva e a vida difícil da maioria de seus primeiros personagens não parecem favorecer a propagação do evangelho. Mas cada aparente revés era um catalisador para o crescimento da Igreja. Não se deve evitar o sofrimento nem a rejeição. Eles fazem parte de como o Evangelho se propaga. A Igreja Primitiva entendeu essa lição, pois a comunidade, em sua oração, não pedia para ser poupada do sofrimento, mas para ter coragem na pregação da Palavra de Deus (At 4.24-31). Pode-se resumir a lição da vida dos crentes e líderes do livro de Atos dos Apóstolos no chamado a ser fortes, fiéis, generosos e unidos, enquanto a Igreja tenta cumprir sua missão de proclamar Jesus pelo poder do Espírito de Deus” (2008, p.169). O apóstolo Pedro ressalta em sua Carta que devemos nos alegrar no fato de sermos participantes das aflições de Cristo, para que também nos alegremos na revelação da sua glória (1Pe 4.13). Estes episódios narrados no livro de Atos comprovam que o direcionamento do Espírito nunca falha. Quando Ele ordena e promete operar em nós e através de nós, é nosso papel confiar na sua direção, mesmo que isso nos custe aflições e perseguições tais quais sofreram Paulo e Silas."
-            }
-          }
+    1:  {
+      "titulo": "Deuteronômio: o livro da Aliança",
+      "data": "4 de outubro de 2026",
+      "trimestre": { "nome": "4º Trimestre de 2026", "titulo": "O Deus da Aliança — Advertências, promessas e bênçãos no livro de Deuteronômio", "comentarista": "Osiel Gomes" },
+      "imagem": "https://www.estudantesdabiblia.com.br/images/2026/img_02053.jpg",
+      "extras": {
+        "textoAureo": {
+          "texto": "Eis aqui esta terra, eu a dei diante de vós; entrai e possuí a terra que o Senhor jurou a vossos pais, Abraão, Isaque e Jacó, que a daria a eles e à sua semente depois deles.",
+          "referencia": "Dt 1.8"
         },
+        "verdadePratica": "A fidelidade a Deus e à sua Palavra dirige o crente a viver pela fé e alcançar as suas promessas.",
+        "leituraDiaria": [
+          {
+            "dia": "Segunda",
+            "referencia": "Js 1.8; 2Tm 3.16",
+            "texto": "A obediência à Palavra conduz à vida santa e à direção de Deus"
+          },
+          {
+            "dia": "Terça",
+            "referencia": "Dt 11.26-28",
+            "texto": "A desobediência à Palavra conduz à perda espiritual"
+          },
+          {
+            "dia": "Quarta",
+            "referencia": "2Tm 2.2",
+            "texto": "A responsabilidade de transmitir fielmente a Palavra à próxima geração"
+          },
+          {
+            "dia": "Quinta",
+            "referencia": "Dt 1.6-8; Fp 3.20",
+            "texto": "Como povo de Deus, somos chamados a avançar pela fé rumo à promessa"
+          },
+          {
+            "dia": "Sexta",
+            "referencia": "Dt 6.5; 12.1",
+            "texto": "Um relacionamento com Deus marcado por amor e obediência"
+          },
+          {
+            "dia": "Sábado",
+            "referencia": "Mt 4.4,7,10",
+            "texto": "Jesus confirma a autoridade e a inspiração de Deuteronômio"
+          }
+        ],
+        "leituraEmClasse": "Deuteronômio 1.1-8",
+        "versiculos": [
+          {
+            "num": 1,
+            "texto": "Estas são as palavras que Moisés falou a todo o Israel, dalém do Jordão, no deserto, na planície defronte do mar de Sufe, entre Parã, e Tofel, e Labã, e Hazerote, e Di-Zaabe."
+          },
+          {
+            "num": 2,
+            "texto": "Onze jornadas há desde Horebe, caminho da montanha de Seir, até Cades-Barneia."
+          },
+          {
+            "num": 3,
+            "texto": "E sucedeu que, no ano quadragésimo, no mês undécimo, no primeiro dia do mês, Moisés falou aos filhos de Israel, conforme tudo o que o Senhor lhe mandara acerca deles,"
+          },
+          {
+            "num": 4,
+            "texto": "depois que feriu a Seom, rei dos amorreus, que habitava em Hesbom, e a Ogue, rei de Basã, que habitava em Astarote, em Edrei."
+          },
+          {
+            "num": 5,
+            "texto": "Dalém do Jordão, na terra de Moabe, começou Moisés a declarar esta lei, dizendo:"
+          },
+          {
+            "num": 6,
+            "texto": "O Senhor, nosso Deus, nos falou em Horebe, dizendo: Tempo bastante haveis estado neste monte."
+          },
+          {
+            "num": 7,
+            "texto": "Voltai-vos e parti; ide à montanha dos amorreus, e a todos os seus vizinhos, e à planície, e à montanha, e ao vale, e ao Sul, e à ribeira do mar, e à terra dos cananeus, e ao Líbano, até ao grande rio, o rio Eufrates."
+          },
+          {
+            "num": 8,
+            "texto": "Eis aqui esta terra, eu a dei diante de vós; entrai e possuí a terra que o Senhor jurou a vossos pais, Abraão, Isaque e Jacó, que a daria a eles e à sua semente depois deles."
+          }
+        ],
+        "hinosSugeridos": "107, 259 e 276",
+        "planoDeAula": {
+          "introducao": "Neste trimestre, estudaremos o livro de Deuteronômio. Esse livro reafirma a aliança de Deus com Israel e destaca a importância da fidelidade à sua Palavra. Na primeira lição, veremos “Deuteronômio: O Livro da Aliança”, compreendendo o seu propósito, contexto histórico e relevância doutrinária para a vida cristã. O comentarista deste trimestre é o Pr. Osiel Gomes, líder da AD em Tirirical (MA), mestre em teologia, conferencista e autor de várias obras, cuja abordagem une profundidade teológica, aplicação prática e fidelidade às Escrituras.",
+          "objetivos": [
+            "Explicar a autoria, o propósito e o valor de Deuteronômio",
+            "Apresentar o contexto histórico e espiritual de Deuteronômio",
+            "Mostrar os ensinos doutrinários e práticos de Deuteronômio"
+          ],
+          "motivacao": "O livro de Deuteronômio é um chamado à fidelidade e à renovação espiritual. As suas páginas revelam princípios eternos para uma vida de fé, obediência e compromisso com Deus. Por isso, esta lição é um desafio a ouvirmos, guardarmos e vivermos a Palavra do Senhor diariamente.",
+          "sugestaoMetodo": "Para o desenvolvimento do segundo tópico, utilize um método expositivo-visual, reproduzindo no quadro ou em slide a divisão natural de Deuteronômio conforme a Bíblia de Estudo Pentecostal Edição Global. Apresente o livro em três grandes discursos de Moisés: retrospectiva histórica (caps. 1 — 4.43), renovação da Lei (caps. 4.44 — 26.19) e bênçãos, advertências e despedida final (caps. 27 — 30), além dos atos finais de Moisés e a sua morte (31 — 34). Em seguida, destaque no mapa bíblico a trajetória de Israel até as campinas de Moabe e relacione geografia e espiritualidade. Esse recurso ajudará a classe a compreender o contexto histórico, o avanço da narrativa e o propósito exortativo de Moisés à nova geração.",
+          "aplicacao": "Deuteronômio ensina-nos que a fidelidade à Palavra de Deus é indispensável para uma vida espiritual consistente. Assim como Israel precisou confiar, obedecer e avançar rumo à promessa, também somos chamados a viver pela fé, rejeitar a desobediência e permanecer firmes na verdade bíblica.",
+          "subsidioRevista": "Vale a pena conhecer essa revista que traz reportagens, artigos, entrevistas e subsídios de apoio à Lições Bíblicas Adultos. Na edição 107, p.36, você encontrará um subsídio especial para esta lição.",
+          "subsidioAuxiliares": "Ao fim dos tópicos, você encontrará auxílios que darão suporte à preparação de sua aula: 1) O texto “Visão Panorâmica”, localizado após o segundo tópico, contribui para a compreensão do contexto imediato do livro de Deuteronômio e da sua estrutura temática; 2) O texto “O Propósito do Livro”, localizado ao fim do terceiro tópico, aprofunda a compreensão do propósito central do livro de Deuteronômio."
+        },
+        "comentarioIntroducao": "Nesta lição, estudaremos o livro de Deuteronômio, integrante do Pentateuco, e destacaremos os princípios da aliança que Deus estabeleceu com Israel. Nele, Moisés apresenta o seu discurso final, prepara o povo para a entrada na Terra Prometida e reafirma a centralidade da Lei e a necessidade de fidelidade a Deus (Dt 28.1,2). O livro também nos conduz à compreensão de três discursos do Legislador de Israel (1 — 4; 5 — 27; 28 — 34), dos seus atos finais e da sua conexão com o Novo Testamento, além de revelar fundamentos permanentes para a vida cristã.",
+        "palavraChave": "ALIANÇA",
+        "topicoI": {
+          "titulo": "I. DEUTERONÔMIO: AUTORIA E PROPÓSITO DO LIVRO",
+          "pontos": [
+            {
+              "titulo": "Autoria.",
+              "texto": "A tradição judaica, a evidência interna e os estudiosos conservadores reconhecem Moisés como autor de Deuteronômio, pois foi o mediador da aliança entre Deus e Israel (Dt 1.1; 31.9,24). O livro registra os discursos, instruções e exortações dirigidos ao povo nas campinas de Moabe. Apenas os acontecimentos posteriores à sua morte, descritos no capítulo final, podem ter sido registrados por Josué ou por outro escriba sob inspiração divina. Em Deuteronômio 1.3, observa-se que o conteúdo antecede a sua morte e a conquista da Terra Prometida."
+            },
+            {
+              "titulo": "Definição.",
+              "texto": "O título deriva da expressão grega deuteronomion, traduzida na Septuaginta como “repetição da Lei” (Dt 17.18). O livro reflete a releitura de Moisés sobre a Lei às vésperas da entrada em Canaã. Na tradição judaica, é chamado hadevārîm (“estas palavras”), destacando-se o seu caráter discursivo. Com linguagem acessível, Moisés exorta Israel à fidelidade exclusiva ao Senhor (Dt 5.7-10) e adverte o povo contra a idolatria e a corrupção moral. Estruturado em três discursos, Deuteronômio reafirma que a obediência à Palavra conduz à bênção e à vida santa (Js 1.8; Cf. 2Tm 3.16)."
+            },
+            {
+              "titulo": "Valor e propósito de Deuteronômio.",
+              "texto": "O valor de Deuteronômio é permanente para a edificação espiritual do povo de Deus, evidenciado no seu uso na reforma de Esdras e Neemias. O livro destaca o amor de Deus e a devoção que Ele requer (Dt 6.5) e instrui o povo a viver com justiça, equidade e integridade, pois a obediência conduz à vida e à bênção, enquanto a desobediência leva à maldição (Dt 11.26-28). O seu propósito é reafirmar a aliança e preparar o povo para a promessa. Hoje, somos chamados a renovar nosso compromisso com Deus, a viver em fidelidade e a experimentar a vitória em Cristo (1Co 15.57)."
+            }
+          ],
+          "sinopse": "Deuteronômio reafirma a Lei e a aliança de Deus com Israel."
+        },
+        "ampliandoConhecimento": {
+          "imagem": "https://www.estudantesdabiblia.com.br/images/livros/livro-0201.jpg",
+          "titulo": "Ampliando o Conhecimento",
+          "texto": "Podemos compreender o livro de Deuteronômio a partir de três verbos centrais que estabelecem os três grandes discursos do livro: recordar (caps. 1 — 4.43), obedecer (caps. 4.44 — 26.19) e vigiar (caps. 27 — 30). Recordar, porque o livro preserva a memória da Lei. Obedecer, porque exorta o povo a viver segundo os mandamentos ao entrar na Terra Prometida. Vigiar, porque apresenta bênçãos para a obediência e maldições para a desobediência. Esse livro nos chama a viver uma vida consciente do Evangelho como testemunho vivo na sociedade (Para ampliar mais o seu conhecimento, consulte a Bíblia de Estudo Pentecostal — Edição Global, editada pela CPAD, pp.219-302).",
+          "fonte": ""
+        },
+        "topicoII": {
+          "titulo": "II. CONTEXTO HISTÓRICO DE DEUTERONÔMIO",
+          "pontos": [
+            {
+              "titulo": "Panorama espiritual.",
+              "texto": "O capítulo 1 de Deuteronômio começa com um cenário espiritual. A expressão “Estas são as palavras que Moisés falou” (v.1), do hebraico Êlleh hadvarim, introduz um discurso com autoridade divina. Não são palavras humanas, mas revelação de Deus, que exige obediência. Dirigidas à nova geração, nas campinas de Moabe, visavam renovar a aliança. Como não presenciou o Êxodo, o povo precisava ser instruído antes de entrar na Terra Prometida. Isso evidencia a importância de transmitir a Palavra entre gerações (2Tm 2.2)."
+            },
+            {
+              "titulo": "Um panorama geográfico.",
+              "texto": "Após apresentar o discurso de Moisés, Deuteronômio descreve regiões percorridas por Israel: o deserto (terra desabitada), a planície de Arabá e locais como Parã, Labã, Hazerote e Di-Zaabe, indicando a rota até Canaã. Em Deuteronômio 1.2, destaca-se que o trajeto de Horebe a Cades-Barneia poderia ser feito em poucos dias, mas levou quarenta anos devido à desobediência do povo. A antiga geração sofreu as consequências da sua incredulidade e falta de temor; logo, aprendemos que a jornada rumo à Canaã Celestial exige santidade, fé e obediência para que alcancemos as promessas de Deus (Hb 4.1-11)."
+            },
+            {
+              "titulo": "O discurso exortativo de Moisés.",
+              "texto": "Consciente de que não entraria na Terra Prometida (Dt 1.37; 3.27), Moisés profere o seu discurso final e prepara o povo para a transição de liderança a Josué. Esse momento de despedida e instrução é recorrente entre líderes bíblicos, como, por exemplo, Jacó, Josué, Samuel e Davi, e também é observado em Jesus (Jo 14-16). Moisés fala em tom de vitória e recorda feitos do Senhor, como a derrota de Seom e Ogue. As palavras dele não eram meramente humanas, mas revelação divina. A “Lei” refere-se à Torá, conjunto de ensinos que orientavam a vida moral e espiritual de Israel, base da sua identidade como povo de Deus."
+            },
+            {
+              "titulo": "Desafiando a nova geração a ser decisiva.",
+              "texto": "A antiga geração de Israel falhou no seu compromisso com o Senhor Deus e não entrou na Terra Prometida. O primeiro discurso de Moisés revisa esse passado e orienta a nova geração à fidelidade. Após quarenta anos, surge um povo chamado a obedecer (Dt 1.6-8). O centro está em Deuteronômio 1.8: Deus já deu a terra; cabia a Israel possuí-la pela fé. É assim também hoje, pois somos chamados a viver pela fé, rumo à cidade celestial (Fp 3.20)."
+            }
+          ],
+          "sinopse": "Moisés relembra a jornada de Israel e exorta à obediência."
+        },
+        "auxilioBibliologico": {
+          "imagem": "https://www.estudantesdabiblia.com.br/images/livros/livro-0201.jpg",
+          "titulo": "VISÃO PANORÂMICA",
+          "texto": "“Moisés rememorou intensamente o concerto de Deus com Israel em três sermões ou discursos inspirados: 1) O primeiro discurso de Moisés recordou a história de Israel — enfatizando a dúvida persistente do povo e a sua rebelião desde que eles deixaram o monte Sinai — e convocou a nova geração para que evitasse os erros do passado e reverentemente temesse e obedecesse a Deus (1.1 — 4.43). 2) O segundo discurso de Moisés relembrou e aplicou muitas Leis do concerto referentes a questões como a adoração, o sábado, os pobres, as festas anuais, os direitos de herança e propriedade, a imoralidade sexual e a preservação da justiça (4.44 — 26.19). 3) O terceiro discurso de Moisés foi uma profecia a respeito das bênçãos e maldições que o povo receberia como resultado de sua obediência ou desobediência (27.1 — 30.20). Os capítulos restantes incluem o ato de Moisés de comissionar Josué como seu sucessor e um testemunho sobre a morte de Moisés (31.1 — 34.12).”",
+          "fonte": "Bíblia de Estudo Pentecostal — Edição Global. 1ª Edição. Rio de Janeiro: CPAD, 2022, p.300."
+        },
+        "topicoIII": {
+          "titulo": "III. O LADO DOUTRINÁRIO E PRÁTICO DE DEUTERONÔMIO",
+          "pontos": [
+            {
+              "titulo": "Relevância doutrinária.",
+              "texto": "A relevância doutrinária de Deuteronômio fundamenta-se na revelação do caráter de Deus: justo, santo, fiel, misericordioso, zeloso e verdadeiro (Dt 7.9; 10.17). O livro apresenta o relacionamento entre o Senhor e Israel — que deve ser marcado por temor, obediência e reverência — e exige submissão contínua à vontade e à Lei de Deus (Dt 6.5; 12.1). Destaca-se também o seu aspecto messiânico, ao apontar para Jesus como o Profeta semelhante a Moisés (Dt 18.15; cf. At 3.23); logo, o povo era chamado a viver segundo a Lei para cumprir a sua missão e, assim, experimentar o favor divino."
+            },
+            {
+              "titulo": "Relevância ética e prática.",
+              "texto": "Em Deuteronômio, Moisés destaca temas essenciais à vida do povo, especialmente a educação espiritual dos filhos (Dt 6.6,7). No cotidiano, os pais deveriam ensinar a Palavra e, assim, formar gerações firmes na fé, como ocorreu com Timóteo (2Tm 1.5). O livro também enfatiza o amor e a fidelidade a Deus, expressos na obediência aos seus mandamentos (Dt 6.5). Além disso, orienta sobre liderança justa e submissão à Lei, visando o bem comum. O seu tom exortativo chama o povo a rejeitar a idolatria e viver segundo a vontade divina. Assim, o livro evidencia princípios de justiça, compaixão e responsabilidade que servem de referência para a ética cristã."
+            }
+          ],
+          "sinopse": "Deuteronômio une doutrina, ética e fidelidade à Palavra."
+        },
+        "auxilioBibliologico2": {
+          "imagem": "https://www.estudantesdabiblia.com.br/images/livros/livro-0201.jpg",
+          "titulo": "O PROPÓSITO DO LIVRO",
+          "texto": "“O propósito original de Moisés ao se dirigir à nova geração de Israel antes de passar a liderança a Josué foi desafiar, encorajar e instruir as pessoas sobre: 1) os atos poderosos e as promessas de Deus, 2) as suas próprias obrigações de fé e obediência previstas no concerto, e 3) a sua necessidade de reverenciar a Deus e viver para realizar os seus propósitos. Moisés queria relembrar o povo da séria responsabilidade e do privilégio de amar e honrar a Deus de todo o coração, de toda a alma e força (6.4).”",
+          "fonte": "Bíblia de Estudo Pentecostal — Edição Global. 1ª Edição. Rio de Janeiro: CPAD, 2022, p.300."
+        },
+        "conclusaoLicao": "A leitura do livro de Deuteronômio possui grande valor para nós, os salvos em Cristo Jesus, pois nos conduz à compreensão da aliança que Deus firmou com Israel. Ao mesmo tempo, ressalta a importância de obedecer aos preceitos divinos e de renovar continuamente nosso compromisso de fé. Somos, portanto, chamados a viver uma vida cristã autêntica, que é marcada pela fé e responsabilidade, e a responder ao Senhor com amor, obediência e disposição constante para ouvir a sua Palavra.",
+        "revisandoConteudo": [
+          {
+            "pergunta": "O que reúne o livro de Deuteronômio?",
+            "resposta": "O livro de Deuteronômio reúne discursos e registros históricos de Moisés."
+          },
+          {
+            "pergunta": "Qual é o valor de Deuteronômio para o povo de Deus?",
+            "resposta": "O valor de Deuteronômio é permanente para a edificação espiritual do povo de Deus, evidenciado o seu uso na reforma de Esdras e Neemias."
+          },
+          {
+            "pergunta": "Qual é a mensagem central de Deuteronômio 1.8?",
+            "resposta": "O centro está em Deuteronômio 1.8: Deus já deu a terra; cabia a Israel possuí-la pela fé."
+          },
+          {
+            "pergunta": "A relevância doutrinária de Deuteronômio fundamenta-se em quê?",
+            "resposta": "A relevância doutrinária de Deuteronômio fundamenta-se na revelação do caráter de Deus: justo, santo, fiel, misericordioso, zeloso e verdadeiro (Dt 7.9; 10.17)."
+          },
+          {
+            "pergunta": "O que demonstram as referências de Cristo e dos apóstolos sobre o livro de Deuteronômio?",
+            "resposta": "Essas referências demonstram que tanto Cristo quanto os seus apóstolos reconheciam Deuteronômio como Escritura inspirada, na qual se encontram fundamentos que apontam para o cumprimento das promessas messiânicas em Jesus Cristo."
+          }
+        ],
+        "subsidiosEnsinador": {
+          "imagem": "https://www.estudantesdabiblia.com.br/images/livros/livro-0305.jpg",
+          "titulo": "DEUTERONÔMIO: O LIVRO DA ALIANÇA",
+          "texto": "Prezado(a) professor(a), a Paz de nosso Senhor e Salvador Jesus Cristo. Estamos iniciando um novo trimestre de estudos com a revista Lições Bíblicas Adultos, editada pela CPAD. Nesta alegre oportunidade, aprenderemos que Deus firmou um concerto com os israelitas e estabeleceu Leis que eles deveriam obedecer integralmente. Por essa razão, Moisés apresenta um belo discurso reafirmando a fidelidade a Deus. O estudo sobre o livro de Deuteronômio traz uma reflexão profunda sobre a centralidade das Escrituras em nosso relacionamento com Deus. O povo israelita recebeu, por intermédio de Moisés, várias orientações no tocante a preservar uma fé obediente aos preceitos da Lei, bem como a viver em santidade e fidelidade para com Deus. O discurso de Moisés na planície de Moabe era uma forma de trazer à memória do povo o propósito para o qual o Senhor o havia guiado durante quarenta anos desafiadores pela travessia pelo deserto. Ali, Deus moldou a fé e o caráter do povo a fim de prepará-lo para tomar posse da Terra Prometida. Em todas as etapas do discurso, a centralidade da Lei recebe atenção especial. De acordo com a Bíblia de Estudo Pentecostal — Edição Global (CPAD), “Moisés rememorou intensamente o concerto de Deus com Israel em três sermões ou discursos inspirados: 1. O primeiro discurso de Moisés recordou a história de Israel — enfatizando a dúvida persistente do povo e a sua rebelião desde que eles deixaram o monte Sinai — e convocou a nova geração para que evitasse os erros do passado e reverentemente temesse e obedecesse a Deus (Dt 1.6 — 4.43); 2. O segundo discurso de Moisés relembrou e aplicou muitas leis do concerto referente a questões como a adoração, o sábado, os pobres, as festas anuais, os direitos de herança e propriedade, a imoralidade sexual e a preservação da justiça (Dt 4.44 — 26.19); 3. O terceiro discurso de Moisés foi uma profecia a respeito das bênçãos e maldições que o povo receberia como resultado de sua obediência e desobediência (Dt 27.1 — 30.20). Os capítulos restantes incluem o ato de Moisés de comissionar Josué como seu sucessor e um testemunho sobre a morte de Moisés (31.1 — 34.12)” (2022, p.300). O destaque dado por Moisés à Lei nos lembra a admoestação de nosso Senhor Jesus a respeito de examinar as Escrituras. São elas que testificam de Cristo e, por intermédio de seus ensinamentos, aprendemos o que é indispensável para alcançar a vida eterna (Jo 5.39)."
+        }
+      }
+    },
     5:  { titulo: "Cristo entre os filósofos: o Deus desconhecido se revela", data: "2 de agosto de 2026", imagem: "https://i.imgur.com/uMSMCyE.png" ,
           extras: {
             textoAureo: { texto: "Mas Deus, não tendo em conta os tempos da ignorância, anuncia agora a todos os homens, em todo lugar, que se arrependam.", referencia: "At 17.30" },
@@ -2032,7 +2167,7 @@
         }
   };
 
-  const primeiraLicao = 4;
+  const primeiraLicao = 1;
   const idsOrdenados = Object.keys(licoes).map(Number).sort((a, b) => a - b);
 
   const telaSelecao = document.getElementById('telaSelecao');
@@ -2057,6 +2192,31 @@
     list.appendChild(item);
   });
 
+  // Oculta todas as lições, exceto a lição 4; o olho mostra/oculta as demais
+  const licaoVisivel = 1;
+  const btnOlho = document.getElementById('btnOlho');
+  const btnOlhoTexto = document.getElementById('btnOlhoTexto');
+
+  function aplicarVisibilidade(mostrarTodas) {
+    list.querySelectorAll('.lesson-item').forEach((el) => {
+      const oculta = !mostrarTodas && Number(el.dataset.id) !== licaoVisivel;
+      el.classList.toggle('oculta', oculta);
+    });
+    btnOlho.classList.toggle('ativo', mostrarTodas);
+    btnOlho.setAttribute('aria-pressed', String(mostrarTodas));
+    const rotulo = mostrarTodas ? 'Ocultar lições' : 'Ver todas as lições';
+    btnOlho.title = rotulo;
+    btnOlho.setAttribute('aria-label', rotulo);
+    btnOlhoTexto.textContent = rotulo;
+  }
+
+  let todasVisiveis = false;
+  btnOlho.addEventListener('click', () => {
+    todasVisiveis = !todasVisiveis;
+    aplicarVisibilidade(todasVisiveis);
+  });
+  aplicarVisibilidade(false);
+
   function abrirLicao(id) {
     const licao = licoes[id];
     if (!licao) return;
@@ -2067,6 +2227,11 @@
     document.getElementById('licaoImagem').src = licao.imagem;
     document.getElementById('licaoImagem').alt = `Lição ${id}: ${licao.titulo}`;
     document.title = `Lição ${id} - Lições Bíblicas CPAD`;
+
+    const tri = licao.trimestre || { nome: '3º Trimestre de 2026', titulo: 'A Igreja dos Gentios — Da chamada missionária à consolidação do Evangelho entre os povos', comentarista: 'Wagner Gaby' };
+    document.getElementById('infoTrimestre').textContent = tri.nome;
+    document.getElementById('infoTitulo').textContent = tri.titulo;
+    document.getElementById('infoComentarista').textContent = tri.comentarista;
 
     const extrasEl = document.getElementById('licaoExtras');
     extrasEl.innerHTML = '';
